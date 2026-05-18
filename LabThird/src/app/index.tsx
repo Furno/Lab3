@@ -1,98 +1,190 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function App() {
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  const [userName, setUserName] = useState('');
+  const [count, setCount] = useState(0);
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <View style={styles.container}>
+
+      <Image
+        source={{
+          uri: 'https://pbs.twimg.com/profile_images/1292436458725208064/LujPh-Yy_400x400.jpg',
+        }}
+        style={styles.image}
+      />
+
+      <Text style={styles.name}>Gabriel Detalla</Text>
+
+      <Text style={styles.course}>
+        Bachelor of Arts in Multimedia Arts
+      </Text>
+
+      <Text style={styles.bio}>
+        I am an illustrator focused on Character Design and Visual Development.
+        I'm inspired primarily by Anime, Manga, and Video-games.
+      </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="put name here"
+        placeholderTextColor="#999"
+        value={userName}
+        onChangeText={setUserName}
+      />
+
+      <Text style={styles.greeting}>
+        {userName
+          ? `how u livin, ${userName}`
+          : 'tell us your name'}
+      </Text>
+
+      <Text style={styles.counter}>
+        {count}
+      </Text>
+
+      <View style={styles.buttonContainer}>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setCount(count + 1)}
+        >
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setCount(count - 1)}
+        >
+          <Text style={styles.buttonText}>-</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.resetButton}
+          onPress={() => setCount(0)}
+        >
+          <Text style={styles.buttonText}>Reset</Text>
+        </TouchableOpacity>
+
+      </View>
+
+      <Text style={styles.dynamicMessage}>
+        {count > 0
+          ? `hey thanks for ${count} clicks`
+          : count < 0
+          ? 'woah hey man whyre u taking away my clicks :CCC'
+          : 'you havent given me any clicks yet'}
+      </Text>
+
+    </View>
   );
 }
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
+// I added a photo, changed up the colors, realligned some things, and added a funny name thing that says hello and a counter 5/17/26
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
+    backgroundColor: '#611515',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    padding: 20,
   },
-  title: {
+
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 20,
+  },
+
+  name: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    fontFamily: 'Tahoma',
+    color: '#F2F2F2',
     textAlign: 'center',
   },
-  code: {
-    textTransform: 'uppercase',
+
+  course: {
+    fontSize: 15,
+    color: '#EB4813',
+    marginBottom: 15,
+    fontFamily: 'Tahoma',
+    textAlign: 'center',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  bio: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontFamily: 'Tahoma',
+    color: '#F2F2F2',
+    maxWidth: 300,
+    marginBottom: 25,
+  },
+
+  input: {
+    width: '80%',
+    backgroundColor: '#F2F2F2',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 15,
+    fontFamily: 'Tahoma',
+  },
+
+  greeting: {
+    fontSize: 18,
+    color: '#F2F2F2',
+    marginBottom: 20,
+    fontFamily: 'Tahoma',
+  },
+
+  counter: {
+    fontSize: 22,
+    color: '#F2F2F2',
+    marginBottom: 15,
+    fontFamily: 'Tahoma',
+  },
+
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
+  },
+
+  button: {
+    backgroundColor: '#EB4813',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+
+  resetButton: {
+    backgroundColor: '#F2F2F2',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+
+  buttonText: {
+    color: '#611515',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  dynamicMessage: {
+    fontSize: 18,
+    color: '#F2F2F2',
+    fontFamily: 'Tahoma',
   },
 });
